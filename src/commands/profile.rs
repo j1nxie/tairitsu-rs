@@ -1,7 +1,6 @@
 use poise::serenity_prelude::{self as serenity, Color};
 use reqwest::Method;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
-use tracing::{debug, info};
 
 use crate::{
     constants::API_URL,
@@ -54,18 +53,37 @@ pub async fn profile(
                         serenity::CreateEmbed::default()
                             .title(body.display_name)
                             .description(format!(
-                            "- **Friend code**: {}\n- **Potential**: {} {}\n- **Joined**: <t:{}:f>",
-                            body.user_code,
-                            body.rating as f64 / 100.0,
-                            if body.rating >= 1300 {
-                                ":star: :star: :star:"
+                                "- **Friend code**: {}\n- **Potential**: {} {}\n- **Joined**: <t:{}:f>",
+                                body.user_code,
+                                body.rating as f64 / 100.0,
+                                if body.rating >= 1300 {
+                                    ":star: :star: :star:"
+                                } else if body.rating >= 1250 {
+                                    ":star: :star:"
+                                } else if body.rating >= 1200 {
+                                    ":star:"
+                                } else { "" },
+                                body.join_date / 1000,
+                            ))
+                            .color(if body.rating >= 1300 {
+                                Color::from_rgb(178, 34, 34)
                             } else if body.rating >= 1250 {
-                                ":star: :star:"
+                                Color::from_rgb(139, 0, 139)
                             } else if body.rating >= 1200 {
-                                ":star:"
-                            } else { "" },
-                            body.join_date / 1000,
-                        )).color(if body.rating >),
+                                Color::from_rgb(220, 20, 60)
+                            } else if body.rating >= 1100 {
+                                Color::from_rgb(139, 0, 0)
+                            } else if body.rating >= 1000 {
+                                Color::from_rgb(128, 0, 128)
+                            } else if body.rating >= 700 {
+                                Color::from_rgb(75, 0, 130)
+                            } else if body.rating >= 350 {
+                                Color::from_rgb(0, 100, 0)
+                            } else if body.rating >= 0 {
+                                Color::from_rgb(25, 25, 112)
+                            } else {
+                                Color::LIGHT_GREY
+                            }),
                     ),
                 )
                 .await?;
