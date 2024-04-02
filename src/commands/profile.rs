@@ -5,7 +5,7 @@ use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use crate::{
     constants::API_URL,
     models::{
-        arcaea::{ArcaeaResponse, UserData},
+        arcaea::{ClearStatsResponse, UserDataResponse},
         prelude::*,
         users,
     },
@@ -31,16 +31,35 @@ pub async fn profile(
             let message = ctx
                 .send(poise::CreateReply::default().content("one second..."))
                 .await?;
+
             let response = ctx
                 .data()
                 .client
                 .request(Method::GET, API_URL)
-                .header("Cookie", token)
+                .header("Cookie", &token)
                 .send()
                 .await?;
 
-            let mut body: UserData =
-                serde_json::from_str::<ArcaeaResponse>(&response.text().await?)?.value;
+            let clear_stats_response = ctx
+                .data()
+                .client
+                .request(
+                    Method::GET,
+                    // defaults to FTR/ETR for now but i will look into the settings
+                    format!("{}/clear_statistic?difficulty=2", API_URL),
+                )
+                .header("Cookie", &token)
+                .send()
+                .await?;
+
+            let mut body = serde_json::from_str::<UserDataResponse>(&response.text().await?)?
+                .value
+                .unwrap();
+
+            let clear_stats =
+                serde_json::from_str::<ClearStatsResponse>(&clear_stats_response.text().await?)?
+                    .value
+                    .unwrap();
 
             // assuming that arcaea friend codes will forever be in the format of `xxx xxx xxx`.
             body.user_code.insert(3, ' ');
@@ -49,11 +68,12 @@ pub async fn profile(
             message
                 .edit(
                     ctx,
+                    // TODO: add in character icon
                     poise::CreateReply::default().content("").embed(
                         serenity::CreateEmbed::default()
                             .title(body.display_name)
                             .description(format!(
-                                "- **Friend code**: {}\n- **Potential**: {} {}\n- **Joined**: <t:{}:f>",
+                                "- **Friend code**: {}\n- **Potential**: {} {}\n- **Joined**: <t:{}:f>\n- **Clear stats (FTR | ETR)**:\n  - {}/{7} clears\n  - {}/{7} full recalls\n  - {}/{7} pure memories",
                                 body.user_code,
                                 body.rating as f64 / 100.0,
                                 match body.rating {
@@ -63,6 +83,10 @@ pub async fn profile(
                                     _ => "",
                                 },
                                 body.join_date / 1000,
+                                clear_stats.clear,
+                                clear_stats.full_recall,
+                                clear_stats.pure_memory,
+                                clear_stats.song_owned_count,
                             ))
                             .color(match body.rating {
                                 1300.. => Color::from_rgb(178, 34, 34),
@@ -73,8 +97,10 @@ pub async fn profile(
                                 700..=999 => Color::from_rgb(75, 0, 130),
                                 350..=699 => Color::from_rgb(0, 100, 0),
                                 0..=349 => Color::from_rgb(25, 25, 112),
-                                _ => Color::LIGHT_GREY
-                            })
+                                // just in case you can somehow hide your rating on site
+                                // maybe i'll make that a setting
+                                _ => Color::LIGHT_GREY,
+                            }),
                     ),
                 )
                 .await?;

@@ -1,9 +1,15 @@
 use serde::Deserialize;
 
 #[derive(Deserialize)]
-pub struct ArcaeaResponse {
+pub struct UserDataResponse {
     pub success: bool,
-    pub value: UserData,
+    pub value: Option<UserData>,
+}
+
+#[derive(Deserialize)]
+pub struct ClearStatsResponse {
+    pub success: bool,
+    pub value: Option<ClearStatistics>,
 }
 
 #[derive(Deserialize)]
@@ -73,4 +79,12 @@ pub enum ClearType {
     EC = 0,
     NC = 1,
     HC = 2,
+}
+
+#[derive(Deserialize)]
+pub struct ClearStatistics {
+    pub clear: u32,
+    pub full_recall: u32,
+    pub pure_memory: u32,
+    pub song_owned_count: u32,
 }
