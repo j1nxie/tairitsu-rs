@@ -40,8 +40,12 @@ pub async fn profile(
                 .send()
                 .await?;
 
-            let body: UserData =
+            let mut body: UserData =
                 serde_json::from_str::<ArcaeaResponse>(&response.text().await?)?.value;
+
+            // assuming that arcaea friend codes will forever be in the format of `xxx xxx xxx`.
+            body.user_code.insert(3, ' ');
+            body.user_code.insert(7, ' ');
 
             message
                 .edit(
@@ -50,9 +54,16 @@ pub async fn profile(
                         serenity::CreateEmbed::default()
                             .title(body.display_name)
                             .description(format!(
-                            "- **Friend code**: {}\n- **Potential**: {}\n- **Joined**: <t:{}:f>",
+                            "- **Friend code**: {}\n- **Potential**: {} {}\n- **Joined**: <t:{}:f>",
                             body.user_code,
                             body.rating as f64 / 100.0,
+                            if body.rating > 1300 {
+                                ":star: :star: :star:"
+                            } else if body.rating > 1250 {
+                                ":star: :star:"
+                            } else if body.rating > 1200 {
+                                ":star:"
+                            } else { "" },
                             body.join_date / 1000,
                         )),
                     ),
