@@ -1,7 +1,7 @@
 use dotenvy::dotenv;
 use migrator::Migrator;
 use poise::serenity_prelude as serenity;
-use reqwest::{cookie::Jar, Client};
+use reqwest::Client;
 use sea_orm::{Database, DatabaseConnection};
 use sea_orm_migration::MigratorTrait;
 use tracing::level_filters::LevelFilter;
