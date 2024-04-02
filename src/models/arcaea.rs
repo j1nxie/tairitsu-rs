@@ -1,4 +1,3 @@
-use chrono::Local;
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -65,7 +64,6 @@ pub enum Difficulty {
     Present = 1,
     Future = 2,
     Beyond = 3,
-    Eternal = 4,
 }
 
 #[derive(Deserialize)]
