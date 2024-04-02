@@ -35,9 +35,10 @@ impl MigrationTrait for Migration {
                     .primary_key()
                     .auto_increment(),
             )
+            .col(ColumnDef::new(Songs::IngameId).string().not_null())
             .col(ColumnDef::new(Songs::Title).string().not_null())
             .col(ColumnDef::new(Songs::Artist).string().not_null())
-            .col(ColumnDef::new(Songs::ReleaseDate).string().not_null())
+            .col(ColumnDef::new(Songs::ReleaseDate).date_time().not_null())
             .col(ColumnDef::new(Songs::Pack).string().not_null())
             .to_owned();
 
@@ -50,12 +51,12 @@ impl MigrationTrait for Migration {
                     .primary_key()
                     .auto_increment(),
             )
-            .col(ColumnDef::new(Charts::SongId).integer().not_null())
+            .col(ColumnDef::new(Charts::SongId).string().not_null())
             .foreign_key(
                 ForeignKey::create()
                     .name("fk-chart-song_id")
                     .from(Charts::Table, Charts::SongId)
-                    .to(Songs::Table, Songs::Id)
+                    .to(Songs::Table, Songs::IngameId)
                     .on_delete(ForeignKeyAction::Cascade),
             )
             .col(ColumnDef::new(Charts::Difficulty).string().not_null())
@@ -73,12 +74,12 @@ impl MigrationTrait for Migration {
                     .primary_key()
                     .auto_increment(),
             )
-            .col(ColumnDef::new(Jackets::SongId).integer().not_null())
+            .col(ColumnDef::new(Jackets::SongId).string().not_null())
             .foreign_key(
                 ForeignKey::create()
                     .name("fk-jacket-song_id")
                     .from(Jackets::Table, Jackets::SongId)
-                    .to(Songs::Table, Songs::Id)
+                    .to(Songs::Table, Songs::IngameId)
                     .on_delete(ForeignKeyAction::Cascade),
             )
             .col(ColumnDef::new(Jackets::ChartId).integer().not_null())
@@ -127,6 +128,7 @@ pub enum Users {
 pub enum Songs {
     Table,
     Id,
+    IngameId,
     Title,
     Artist,
     ReleaseDate,

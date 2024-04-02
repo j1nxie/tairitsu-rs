@@ -7,8 +7,9 @@ pub struct Model {
     pub id: i32,
     pub title: String,
     pub artist: String,
-    pub release_date: String,
+    pub release_date: DateTime,
     pub pack: String,
+    pub ingame_id: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
