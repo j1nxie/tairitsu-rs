@@ -57,15 +57,15 @@ pub async fn profile(
                             "- **Friend code**: {}\n- **Potential**: {} {}\n- **Joined**: <t:{}:f>",
                             body.user_code,
                             body.rating as f64 / 100.0,
-                            if body.rating > 1300 {
+                            if body.rating >= 1300 {
                                 ":star: :star: :star:"
-                            } else if body.rating > 1250 {
+                            } else if body.rating >= 1250 {
                                 ":star: :star:"
-                            } else if body.rating > 1200 {
+                            } else if body.rating >= 1200 {
                                 ":star:"
                             } else { "" },
                             body.join_date / 1000,
-                        )),
+                        )).color(if body.rating >),
                     ),
                 )
                 .await?;
