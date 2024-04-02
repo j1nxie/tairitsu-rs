@@ -18,7 +18,7 @@ pub struct UserData {
     pub country: String,
     pub course_banners: Vec<String>,
     pub max_friend: u32,
-    pub rating: u32,
+    pub rating: i32,
     pub join_date: u64,
 }
 
