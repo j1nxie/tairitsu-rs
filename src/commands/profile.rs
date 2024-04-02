@@ -1,6 +1,6 @@
 use poise::serenity_prelude::{self as serenity, Color};
 use reqwest::Method;
-use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
+use sea_orm::{ActiveModelTrait, ActiveValue, ColumnTrait, EntityTrait, QueryFilter};
 
 use crate::{
     constants::API_URL,
@@ -117,6 +117,55 @@ pub async fn profile(
                 ),
             )
             .await?;
+        }
+    }
+
+    Ok(())
+}
+
+#[poise::command(slash_command, prefix_command)]
+pub async fn login(ctx: Context<'_>) -> Result<(), Error> {
+    ctx.send(
+        poise::CreateReply::default()
+            .content("login instructions have been sent to your DMs. (please enable **Privacy Settings > Direct Messages** if you have not received it.)")
+    ).await?;
+
+    ctx.author()
+        .direct_message(&ctx, serenity::CreateMessage::new().content("hi"))
+        .await?;
+
+    Ok(())
+}
+
+#[poise::command(slash_command, prefix_command)]
+pub async fn logout(ctx: Context<'_>) -> Result<(), Error> {
+    let user = Users::find()
+        .filter(users::Column::DiscordId.eq(ctx.author().id.to_string()))
+        .one(&ctx.data().db)
+        .await?;
+
+    let token = user.clone().and_then(|x| x.arcaea_token);
+
+    match token {
+        Some(_) => {
+            let message = ctx
+                .send(poise::CreateReply::default().content("one second..."))
+                .await?;
+
+            let mut user: users::ActiveModel = user.unwrap().into();
+            user.arcaea_token = ActiveValue::set(None);
+            user.update(&ctx.data().db).await?;
+
+            message
+                .edit(
+                    ctx,
+                    poise::CreateReply::default().content("you are now logged out of the bot!"),
+                )
+                .await?;
+        }
+        None => {
+            ctx.send(poise::CreateReply::default().content("you are not logged into the bot!"))
+                .await?;
         }
     }
 

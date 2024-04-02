@@ -48,7 +48,12 @@ async fn main() -> Result<(), Error> {
 
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
-            commands: vec![commands::status::status(), commands::profile::profile()],
+            commands: vec![
+                commands::status::status(),
+                commands::profile::profile(),
+                commands::profile::login(),
+                commands::profile::logout(),
+            ],
             prefix_options: poise::PrefixFrameworkOptions {
                 prefix: Some("a>".into()),
                 case_insensitive_commands: true,
