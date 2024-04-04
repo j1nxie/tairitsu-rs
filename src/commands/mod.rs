@@ -2,6 +2,7 @@ use poise::serenity_prelude::{self as serenity, Color};
 
 use crate::{Context, Error};
 
+pub mod help;
 pub mod profile;
 pub mod recent;
 pub mod status;
