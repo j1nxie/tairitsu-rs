@@ -61,7 +61,7 @@ pub struct RecentScore {
     pub clear_type: u32,
     pub best_clear_type: u32,
     pub health: u32,
-    pub time_played: u64,
+    pub time_played: i64,
 }
 
 #[derive(Deserialize)]
