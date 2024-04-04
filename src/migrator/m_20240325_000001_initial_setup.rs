@@ -69,7 +69,7 @@ impl MigrationTrait for Migration {
             )
             .col(ColumnDef::new(Charts::Difficulty).string().not_null())
             .col(ColumnDef::new(Charts::Level).string().not_null())
-            .col(ColumnDef::new(Charts::Constant).decimal())
+            .col(ColumnDef::new(Charts::Constant).decimal().not_null())
             .col(ColumnDef::new(Charts::Charter).string())
             .to_owned();
 
