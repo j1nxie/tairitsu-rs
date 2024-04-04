@@ -1,6 +1,8 @@
 use async_trait::async_trait;
 use sea_orm_migration::prelude::*;
 
+use super::{Charts, Jackets, Songs, Users};
+
 pub struct Migration;
 
 impl MigrationName for Migration {
@@ -120,44 +122,4 @@ impl MigrationTrait for Migration {
 
         Ok(())
     }
-}
-
-#[derive(Iden)]
-pub enum Users {
-    Table,
-    Id,
-    DiscordId,
-    ArcaeaToken,
-}
-
-#[derive(Iden)]
-pub enum Songs {
-    Table,
-    Id,
-    IngameId,
-    Title,
-    Artist,
-    ReleaseDate,
-    Bpm,
-    Pack,
-}
-
-#[derive(Iden)]
-pub enum Charts {
-    Table,
-    Id,
-    SongId,
-    Difficulty,
-    Level,
-    Constant,
-    Charter,
-}
-
-#[derive(Iden)]
-pub enum Jackets {
-    Table,
-    Id,
-    SongId,
-    ChartId,
-    JacketUrl,
 }

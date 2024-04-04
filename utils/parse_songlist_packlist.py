@@ -16,7 +16,9 @@ with open("packlist", encoding="utf-8") as packlist_file:
 with open("songs.csv", "w", newline="", encoding="utf-8") as song_file:
     writer = csv.writer(song_file)
 
-    writer.writerow(["ingame_id", "title", "artist", "release_date", "bpm", "pack"])
+    writer.writerow(
+        ["ingame_id", "title", "artist", "release_date", "version", "bpm", "pack"]
+    )
     for song in songlist["songs"]:
         for pack in packlist["packs"]:
             if song["set"] == pack["id"]:
@@ -64,6 +66,7 @@ with open("songs.csv", "w", newline="", encoding="utf-8") as song_file:
                 song["title_localized"]["en"],
                 song["artist"],
                 datetime.fromtimestamp(song["date"]).isoformat() + "+0700",
+                song["version"],
                 song["bpm"],
                 pack_name,
             ]
@@ -136,6 +139,9 @@ with open("charts.csv", "w", newline="", encoding="utf-8") as chart_file:
                                     else song["date"]
                                 ).isoformat()
                                 + "+0700",
+                                chart["version"]
+                                if "version" in chart.keys()
+                                else song["version"],
                                 chart["bpm"] if "bpm" in chart.keys() else song["bpm"],
                                 pack_name,
                             ]
