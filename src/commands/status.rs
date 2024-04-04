@@ -3,6 +3,10 @@ use std::time::UNIX_EPOCH;
 use crate::{constants::version::get_version, Context, Error};
 use poise::serenity_prelude as serenity;
 
+fn get_bot_avatar(ctx: Context<'_>) -> String {
+    ctx.cache().current_user().avatar_url().unwrap()
+}
+
 /// get the bot's status
 #[poise::command(prefix_command, slash_command)]
 pub async fn status(ctx: Context<'_>) -> Result<(), Error> {
@@ -12,6 +16,7 @@ pub async fn status(ctx: Context<'_>) -> Result<(), Error> {
         .field("version", get_version(), false)
         .field("rust", format!("[{0}](https://releases.rs/docs/{0})", rustc_version_runtime::version().to_string()), true)
         .field("uptime", format!("<t:{}:R>", std::time::SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()), true)
+        .thumbnail(get_bot_avatar(ctx))
     )).await?;
 
     Ok(())
