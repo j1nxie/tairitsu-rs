@@ -55,6 +55,8 @@ with open("songs.csv", "w", newline="", encoding="utf-8") as song_file:
                         "lanota",
                     ]:
                         pack_name += " Collaboration"
+            elif song["set"] == "single":
+                pack_name = "Memory Archive"
 
         writer.writerow(
             [
@@ -118,6 +120,8 @@ with open("charts.csv", "w", newline="", encoding="utf-8") as chart_file:
                                         "lanota",
                                     ]:
                                         pack_name += " Collaboration"
+                            elif song["set"] == "single":
+                                pack_name = "Memory Archive"
 
                         song_writer.writerow(
                             [
