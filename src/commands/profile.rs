@@ -13,7 +13,7 @@ use crate::{
     Context, Error,
 };
 
-#[poise::command(prefix_command, slash_command)]
+#[poise::command(prefix_command, slash_command, aliases("arcaea", "me"))]
 pub async fn profile(
     ctx: Context<'_>,
     #[description = "selected user"] user: Option<serenity::User>,

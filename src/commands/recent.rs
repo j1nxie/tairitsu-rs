@@ -16,7 +16,7 @@ use crate::{
 
 use super::login_error;
 
-#[poise::command(slash_command, prefix_command)]
+#[poise::command(slash_command, prefix_command, aliases("rs"))]
 pub async fn recent(
     ctx: Context<'_>,
     #[description = "selected user"] user: Option<serenity::User>,
