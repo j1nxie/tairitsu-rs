@@ -51,15 +51,15 @@ pub struct ArcaeaSettings {
 #[derive(Deserialize)]
 pub struct RecentScore {
     pub song_id: String,
-    pub difficulty: Difficulty,
+    pub difficulty: u32,
     pub score: u32,
     pub shiny_perfect_count: u32,
     pub perfect_count: u32,
     pub near_count: u32,
     pub miss_count: u32,
     pub modifier: u32,
-    pub clear_type: ClearType,
-    pub best_clear_type: ClearType,
+    pub clear_type: u32,
+    pub best_clear_type: u32,
     pub health: u32,
     pub time_played: u64,
 }
