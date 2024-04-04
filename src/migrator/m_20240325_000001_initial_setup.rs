@@ -39,6 +39,7 @@ impl MigrationTrait for Migration {
             .col(ColumnDef::new(Songs::Title).string().not_null())
             .col(ColumnDef::new(Songs::Artist).string().not_null())
             .col(ColumnDef::new(Songs::ReleaseDate).date_time().not_null())
+            .col(ColumnDef::new(Songs::Bpm).string().not_null())
             .col(ColumnDef::new(Songs::Pack).string().not_null())
             .to_owned();
 
@@ -132,6 +133,7 @@ pub enum Songs {
     Title,
     Artist,
     ReleaseDate,
+    Bpm,
     Pack,
 }
 
