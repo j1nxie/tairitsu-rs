@@ -3,6 +3,7 @@ use reqwest::Method;
 use sea_orm::{ActiveModelTrait, ActiveValue, ColumnTrait, EntityTrait, QueryFilter};
 
 use crate::{
+    commands::login_error,
     constants::API_URL,
     models::{
         arcaea::{ClearStatsResponse, UserDataResponse},
@@ -106,17 +107,7 @@ pub async fn profile(
                 .await?;
         }
         None => {
-            ctx.send(
-                poise::CreateReply::default().embed(
-                    serenity::CreateEmbed::new()
-                        .color(Color::RED)
-                        .title("you're not logged in!")
-                        .description(
-                            "send `a>login` to my DMs or use `/login` to start logging in.",
-                        ),
-                ),
-            )
-            .await?;
+            login_error(ctx).await?;
         }
     }
 
@@ -131,7 +122,7 @@ pub async fn login(ctx: Context<'_>) -> Result<(), Error> {
     ).await?;
 
     ctx.author()
-        .direct_message(&ctx, serenity::CreateMessage::new().content("hi"))
+        .direct_message(&ctx, serenity::CreateMessage::new().content(""))
         .await?;
 
     Ok(())
