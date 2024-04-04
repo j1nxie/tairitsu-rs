@@ -1,4 +1,4 @@
-use poise::serenity_prelude::{self as serenity, UserId};
+use poise::serenity_prelude::{self as serenity, Color, UserId};
 use reqwest::Method;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use thousands::Separable;
@@ -56,12 +56,12 @@ pub async fn recent(
                         .await?
                         .unwrap();
 
-                    let diff_name = match recent.difficulty {
-                        0 => "PST",
-                        1 => "PRS",
-                        2 => "FTR",
-                        3 => "BYD",
-                        4 => "ETR",
+                    let (diff_name, color) = match recent.difficulty {
+                        0 => ("PST", Color::from_rgb(92, 97, 153)),
+                        1 => ("PRS", Color::from_rgb(142, 174, 79)),
+                        2 => ("FTR", Color::from_rgb(153, 50, 204)),
+                        3 => ("BYD", Color::from_rgb(243, 23, 45)),
+                        4 => ("ETR", Color::from_rgb(154, 107, 196)),
                         _ => unreachable!(),
                     };
 
@@ -140,7 +140,8 @@ pub async fn recent(
                                     "played at {}",
                                     chrono::DateTime::from_timestamp_millis(recent.time_played)
                                         .unwrap()
-                                ))),
+                                )))
+                                .color(color),
                         ),
                     )
                     .await?;
