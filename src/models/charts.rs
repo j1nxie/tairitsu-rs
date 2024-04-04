@@ -8,7 +8,7 @@ pub struct Model {
     pub song_id: String,
     pub difficulty: String,
     pub level: String,
-    pub constant: Option<Decimal>,
+    pub constant: Decimal,
     pub charter: Option<String>,
 }
 
