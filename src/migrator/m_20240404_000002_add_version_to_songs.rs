@@ -16,7 +16,12 @@ impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         let table = Table::alter()
             .table(Songs::Table)
-            .add_column(ColumnDef::new(Songs::Version).string().not_null())
+            .add_column(
+                ColumnDef::new(Songs::Version)
+                    .string()
+                    .not_null()
+                    .default(""),
+            )
             .to_owned();
 
         manager.alter_table(table).await
