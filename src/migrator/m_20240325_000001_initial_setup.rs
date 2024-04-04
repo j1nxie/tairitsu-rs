@@ -35,7 +35,12 @@ impl MigrationTrait for Migration {
                     .primary_key()
                     .auto_increment(),
             )
-            .col(ColumnDef::new(Songs::IngameId).string().not_null())
+            .col(
+                ColumnDef::new(Songs::IngameId)
+                    .string()
+                    .unique_key()
+                    .not_null(),
+            )
             .col(ColumnDef::new(Songs::Title).string().not_null())
             .col(ColumnDef::new(Songs::Artist).string().not_null())
             .col(ColumnDef::new(Songs::ReleaseDate).date_time().not_null())
