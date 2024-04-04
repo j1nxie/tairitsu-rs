@@ -79,8 +79,8 @@ with open("charts.csv", "w", newline="", encoding="utf-8") as chart_file:
                 song_id = song["id"]
 
                 if chart["ratingClass"] == 3:
-                    song_id += "_byd"
                     if "title_localized" in chart.keys():
+                        song_id += "_byd"
                         for pack in packlist["packs"]:
                             if song["set"] == pack["id"]:
                                 if "append" in pack["id"]:
