@@ -22,6 +22,7 @@ pub struct UserData {
     pub character: u32,
     pub country: String,
     pub course_banners: Vec<String>,
+    pub recent_score: Vec<RecentScore>,
     pub max_friend: u32,
     pub rating: i32,
     pub join_date: u64,
