@@ -14,6 +14,7 @@ pub struct Model {
     pub release_date: DateTime,
     pub bpm: String,
     pub pack: String,
+    pub version: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
