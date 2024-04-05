@@ -56,6 +56,7 @@ async fn main() -> Result<(), Error> {
                 commands::profile::logout(),
                 commands::recent::recent(),
                 commands::help::help(),
+                commands::song::song(),
             ],
             prefix_options: poise::PrefixFrameworkOptions {
                 prefix: Some("a>".into()),
