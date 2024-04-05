@@ -1,4 +1,4 @@
-use poise::serenity_prelude::{self as serenity, Color, UserId};
+use poise::serenity_prelude::{self as serenity, Color, Timestamp, UserId};
 use reqwest::Method;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use thousands::Separable;
@@ -139,13 +139,19 @@ pub async fn recent(
                                     ),
                                 )
                                 .footer(serenity::CreateEmbedFooter::new(format!(
-                                    "potential: {:.2} • played on: {}",
+                                    "potential: {:.2}",
                                     calculate_potential(recent.score, chart.constant).unwrap(),
-                                    chrono::DateTime::from_timestamp_millis(recent.time_played)
-                                        .unwrap()
-                                        .naive_local()
-                                        .format("%d/%m/%Y at %H:%M:%S")
                                 )))
+                                .timestamp(
+                                    Timestamp::parse(
+                                        &chrono::DateTime::from_timestamp_millis(
+                                            recent.time_played,
+                                        )
+                                        .unwrap()
+                                        .to_rfc3339(),
+                                    )
+                                    .unwrap(),
+                                )
                                 .color(color),
                         ),
                     )
