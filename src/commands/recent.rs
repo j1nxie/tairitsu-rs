@@ -11,6 +11,7 @@ use crate::{
         prelude::{Charts, Songs, Users},
         songs, users,
     },
+    utils::potential::calculate_potential,
     Context, Error,
 };
 
@@ -67,10 +68,10 @@ pub async fn recent(
 
                     let clear_type = match recent.clear_type {
                         // TODO: figure out the rest
-                        0 => "track lost",
-                        1 => "easy clear",
-                        2 => "normal clear",
-                        3 => "hard clear",
+                        0 => "TRACK LOST",
+                        1 => "EASY CLEAR",
+                        2 => "TRACK CLEAR",
+                        3 => "HARD CLEAR",
                         _ => todo!(),
                     };
 
@@ -92,6 +93,7 @@ pub async fn recent(
                         8_900_000..=9_199_999 => "B",
                         8_600_000..=8_899_999 => "C",
                         0..=8_599_999 => "D",
+                        _ => unreachable!(),
                     };
 
                     ctx.send(
@@ -101,10 +103,11 @@ pub async fn recent(
                                     "{} [{} {}]",
                                     &song.title, diff_name, chart.constant
                                 ))
+                                .description(clear_type)
                                 .field(
                                     "score",
                                     format!(
-                                        "**{}**\n**{}** rank",
+                                        "- **{}**\n- **{}** rank",
                                         recent.score.separate_with_commas(),
                                         rank,
                                     ),
@@ -113,7 +116,7 @@ pub async fn recent(
                                 .field(
                                     "judgements",
                                     format!(
-                                        "**{}** (+{}) pures\n**{}** fars\n**{}** losts",
+                                        "- **PURE**: {} *(+{})*\n- **FAR**: {}\n- **LOST**: {}",
                                         recent.perfect_count,
                                         recent.shiny_perfect_count,
                                         recent.near_count,
@@ -121,7 +124,6 @@ pub async fn recent(
                                     ),
                                     true,
                                 )
-                                .field("clear type", clear_type, false)
                                 .author(
                                     serenity::CreateEmbedAuthor::new(format!(
                                         "{} ({})",
@@ -137,9 +139,12 @@ pub async fn recent(
                                     ),
                                 )
                                 .footer(serenity::CreateEmbedFooter::new(format!(
-                                    "played at {}",
+                                    "potential: {:.2} • played on: {}",
+                                    calculate_potential(recent.score, chart.constant).unwrap(),
                                     chrono::DateTime::from_timestamp_millis(recent.time_played)
                                         .unwrap()
+                                        .naive_local()
+                                        .format("%d/%m/%Y at %H:%M:%S")
                                 )))
                                 .color(color),
                         ),
