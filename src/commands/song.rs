@@ -10,7 +10,7 @@ use crate::{
     Context, Error,
 };
 
-#[poise::command(slash_command, prefix_command)]
+#[poise::command(slash_command, prefix_command, aliases("info"))]
 pub async fn song(
     ctx: Context<'_>,
     #[description = "the song to search"] query: String,
