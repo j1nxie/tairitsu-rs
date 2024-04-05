@@ -43,8 +43,6 @@ async fn main() -> Result<(), Error> {
 
     let db = Database::connect(db_url).await?;
 
-    tracing::info!("no");
-
     Migrator::up(&db, None).await?;
 
     let framework = poise::Framework::builder()
