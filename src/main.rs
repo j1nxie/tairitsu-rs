@@ -11,6 +11,7 @@ mod commands;
 mod constants;
 mod migrator;
 mod models;
+mod utils;
 
 struct Data {
     db: DatabaseConnection,

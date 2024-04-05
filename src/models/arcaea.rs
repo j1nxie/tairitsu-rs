@@ -52,7 +52,7 @@ pub struct ArcaeaSettings {
 pub struct RecentScore {
     pub song_id: String,
     pub difficulty: u32,
-    pub score: u32,
+    pub score: i32,
     pub shiny_perfect_count: u32,
     pub perfect_count: u32,
     pub near_count: u32,
