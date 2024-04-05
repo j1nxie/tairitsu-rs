@@ -1,6 +1,8 @@
 use poise::serenity_prelude::{self as serenity, Color};
 use reqwest::Method;
-use sea_orm::{ActiveModelTrait, ActiveValue, ColumnTrait, EntityTrait, QueryFilter};
+use sea_orm::{
+    ActiveModelTrait, ActiveValue, ColumnTrait, EntityTrait, IntoActiveModel, QueryFilter, Set,
+};
 
 use crate::{
     commands::login_error,
@@ -115,7 +117,36 @@ pub async fn profile(
 }
 
 #[poise::command(slash_command, prefix_command)]
-pub async fn login(ctx: Context<'_>) -> Result<(), Error> {
+pub async fn login(
+    ctx: Context<'_>,
+    #[description = "your Arcaea Online token"] token: Option<String>,
+) -> Result<(), Error> {
+    if let Some(token) = token {
+        let user = Users::find()
+            .filter(users::Column::DiscordId.eq(ctx.author().id.to_string()))
+            .one(&ctx.data().db)
+            .await?;
+
+        match user {
+            Some(user) => {
+                let mut user = user.into_active_model();
+                user.arcaea_token = Set(Some(token));
+
+                user.update(&ctx.data().db).await?;
+            }
+
+            None => {
+                let user = users::ActiveModel {
+                    discord_id: Set(ctx.author().id.to_string()),
+                    arcaea_token: Set(Some(token)),
+                    ..Default::default()
+                };
+
+                user.insert(&ctx.data().db).await?;
+            }
+        }
+    }
+
     ctx.send(
         poise::CreateReply::default()
             .content("login instructions have been sent to your DMs. (please enable **Privacy Settings > Direct Messages** if you have not received it.)")
