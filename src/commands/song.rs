@@ -4,8 +4,8 @@ use simsearch::SimSearch;
 
 use crate::{
     models::{
-        charts,
-        prelude::{Charts, Songs},
+        charts, jackets,
+        prelude::{Charts, Jackets, Songs},
     },
     Context, Error,
 };
@@ -32,8 +32,13 @@ pub async fn song(
     match song {
         Some(song) => {
             let song = Songs::find_by_id(*song).one(&ctx.data().db).await?.unwrap();
+            let jacket = Jackets::find()
+                .filter(jackets::Column::SongId.eq(&song.ingame_id))
+                .one(&ctx.data().db)
+                .await?
+                .unwrap();
             let charts = Charts::find()
-                .filter(charts::Column::SongId.eq(song.ingame_id))
+                .filter(charts::Column::SongId.eq(&song.ingame_id))
                 .all(&ctx.data().db)
                 .await?;
 
@@ -59,7 +64,8 @@ pub async fn song(
                             )
                             .field("bpm", song.bpm, true)
                             .field("version", song.version, true)
-                            .field("difficulties", chart_string, false),
+                            .field("difficulties", chart_string, false)
+                            .image(jacket.jacket_url),
                     ),
                 )
                 .await?;
