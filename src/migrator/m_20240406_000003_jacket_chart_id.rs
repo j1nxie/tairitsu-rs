@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use sea_orm_migration::prelude::*;
 
-use super::{Jackets, Songs};
+use super::Jackets;
 
 pub struct Migration;
 
