@@ -3,6 +3,7 @@ use sea_orm_migration::prelude::*;
 
 mod m_20240325_000001_initial_setup;
 mod m_20240404_000002_add_version_to_songs;
+mod m_20240406_000003_jacket_chart_id;
 
 pub struct Migrator;
 
@@ -12,6 +13,7 @@ impl MigratorTrait for Migrator {
         vec![
             Box::new(m_20240325_000001_initial_setup::Migration),
             Box::new(m_20240404_000002_add_version_to_songs::Migration),
+            Box::new(m_20240406_000003_jacket_chart_id::Migration),
         ]
     }
 }

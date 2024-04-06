@@ -6,7 +6,7 @@ pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
     pub song_id: String,
-    pub chart_id: i32,
+    pub difficulty: String,
     pub jacket_url: String,
 }
 
