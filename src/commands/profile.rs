@@ -153,6 +153,8 @@ pub async fn login(
                 .one(&ctx.data().db)
                 .await?;
 
+            let token = format!("sid={}", token);
+
             match user {
                 Some(user) => {
                     let mut user = user.into_active_model();
