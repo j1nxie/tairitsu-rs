@@ -23,7 +23,7 @@ type Context<'a> = poise::Context<'a, Data, Error>;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    dotenv().expect("failed to load .env file.");
+    dotenv().ok();
     tracing_subscriber::fmt()
         .with_env_filter(
             EnvFilter::builder()
