@@ -1,6 +1,6 @@
 FROM rust:1.76.0-alpine3.19 as build
 
-RUN apk add g++
+RUN apk add g++ pkg-config openssl
 
 WORKDIR /app
 COPY Cargo.toml Cargo.toml
