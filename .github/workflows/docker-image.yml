@@ -32,6 +32,6 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   push: true
-                  tags: j1nxie/closure-api:latest
+                  tags: j1nxie/tairitsu-rs:latest
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
