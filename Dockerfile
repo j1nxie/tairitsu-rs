@@ -13,5 +13,5 @@ RUN cargo build --release
 
 FROM alpine:3.19.1 as run
 WORKDIR /app
-COPY --from=build /app/target/release/osu-irc-3 .
-ENTRYPOINT /app/osu-irc-3
+COPY --from=build /app/target/release/tairitsu-rs .
+ENTRYPOINT /app/tairitsu-rs
