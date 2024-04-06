@@ -164,3 +164,28 @@ with open("charts.csv", "w", newline="", encoding="utf-8") as chart_file:
                         chart["chartDesigner"],
                     ]
                 )
+
+with open("jackets.csv", "w", newline="", encoding="utf-8") as jacket_file:
+    writer = csv.writer(jacket_file)
+
+    writer.writerow(["song_id", "difficulty", "jacket_url"])
+
+    with open("charts.csv", "r", newline="", encoding="utf-8") as chart_file:
+        reader = csv.reader(chart_file)
+
+        for line in reader:
+            if line[0] == "song_id":
+                continue
+
+            id = line[0]
+            diff = line[1]
+
+            if "_byd" in id:
+                id_url = id.removesuffix("_byd")
+                writer.writerow(
+                    [id, diff, f"https://cdn.rylie.moe/{id_url}/1080_3_256.jpg"]
+                )
+            else:
+                writer.writerow(
+                    [id, diff, f"https://cdn.rylie.moe/{id}/1080_base_256.jpg"]
+                )

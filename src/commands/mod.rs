@@ -5,6 +5,7 @@ use crate::{Context, Error};
 pub mod help;
 pub mod profile;
 pub mod recent;
+pub mod song;
 pub mod status;
 
 pub async fn login_error(ctx: Context<'_>) -> Result<(), Error> {

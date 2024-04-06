@@ -7,8 +7,8 @@ use crate::{
     constants::API_URL,
     models::{
         arcaea::UserDataResponse,
-        charts,
-        prelude::{Charts, Songs, Users},
+        charts, jackets,
+        prelude::{Charts, Jackets, Songs, Users},
         songs, users,
     },
     utils::potential::calculate_potential,
@@ -66,6 +66,16 @@ pub async fn recent(
                         _ => unreachable!(),
                     };
 
+                    let jacket = Jackets::find()
+                        .filter(
+                            jackets::Column::SongId
+                                .eq(&song.ingame_id)
+                                .and(jackets::Column::Difficulty.eq(diff_name)),
+                        )
+                        .one(&ctx.data().db)
+                        .await?
+                        .unwrap();
+
                     let clear_type = match recent.clear_type {
                         // TODO: figure out the rest
                         0 => "TRACK LOST",
@@ -103,7 +113,11 @@ pub async fn recent(
                                     "{} [{} {}]",
                                     &song.title, diff_name, chart.constant
                                 ))
-                                .description(clear_type)
+                                .description(match chart.charter {
+                                    Some(charter) => format!("chart design: {}", charter),
+                                    None => String::new(),
+                                })
+                                .field("clear type", clear_type, true)
                                 .field(
                                     "score",
                                     format!(
@@ -152,7 +166,8 @@ pub async fn recent(
                                     )
                                     .unwrap(),
                                 )
-                                .color(color),
+                                .color(color)
+                                .thumbnail(jacket.jacket_url),
                         ),
                     )
                     .await?;

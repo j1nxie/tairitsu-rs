@@ -43,8 +43,6 @@ async fn main() -> Result<(), Error> {
 
     let db = Database::connect(db_url).await?;
 
-    tracing::info!("no");
-
     Migrator::up(&db, None).await?;
 
     let framework = poise::Framework::builder()
@@ -56,6 +54,7 @@ async fn main() -> Result<(), Error> {
                 commands::profile::logout(),
                 commands::recent::recent(),
                 commands::help::help(),
+                commands::song::song(),
             ],
             prefix_options: poise::PrefixFrameworkOptions {
                 prefix: Some("a>".into()),
