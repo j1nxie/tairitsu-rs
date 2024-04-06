@@ -121,40 +121,76 @@ pub async fn login(
     ctx: Context<'_>,
     #[description = "your Arcaea Online token"] token: Option<String>,
 ) -> Result<(), Error> {
-    if let Some(token) = token {
-        let user = Users::find()
-            .filter(users::Column::DiscordId.eq(ctx.author().id.to_string()))
-            .one(&ctx.data().db)
+    if ctx.guild_channel().await.is_some() {
+        ctx.send(
+            poise::CreateReply::default()
+                .content("login instructions have been sent to your DMs. (please enable **Privacy Settings > Direct Messages** if you have not received it.)")
+        ).await?;
+
+        ctx.author()
+            .direct_message(
+                &ctx,
+                serenity::CreateMessage::default().content(
+                    "**how to log into Tairitsu**:
+1. go to [Arcaea Online](https://arcaea.lowiro.com/) using a PC or laptop.
+2. open your browser's DevTools (Ctrl+Shift+I or F12).
+3. go to the Application tab (click the `>>` arrows if you don't see it.)
+4. under Storage > Cookie, click on the `https://arcaea.lowiro.com` entry and look for the entry with the name `sid` in the table to the right.
+5. copy `sid`'s value in the table and type in `a>login <value>` in Tairitsu's DMs.
+6. enjoy.
+                    ",
+                ),
+            )
             .await?;
 
-        match user {
-            Some(user) => {
-                let mut user = user.into_active_model();
-                user.arcaea_token = Set(Some(token));
-
-                user.update(&ctx.data().db).await?;
-            }
-
-            None => {
-                let user = users::ActiveModel {
-                    discord_id: Set(ctx.author().id.to_string()),
-                    arcaea_token: Set(Some(token)),
-                    ..Default::default()
-                };
-
-                user.insert(&ctx.data().db).await?;
-            }
-        }
+        return Ok(());
     }
 
-    ctx.send(
-        poise::CreateReply::default()
-            .content("login instructions have been sent to your DMs. (please enable **Privacy Settings > Direct Messages** if you have not received it.)")
-    ).await?;
+    match token {
+        Some(token) => {
+            let user = Users::find()
+                .filter(users::Column::DiscordId.eq(ctx.author().id.to_string()))
+                .one(&ctx.data().db)
+                .await?;
 
-    ctx.author()
-        .direct_message(&ctx, serenity::CreateMessage::new().content(""))
-        .await?;
+            match user {
+                Some(user) => {
+                    let mut user = user.into_active_model();
+                    user.arcaea_token = Set(Some(token));
+
+                    user.update(&ctx.data().db).await?;
+                }
+
+                None => {
+                    let user = users::ActiveModel {
+                        discord_id: Set(ctx.author().id.to_string()),
+                        arcaea_token: Set(Some(token)),
+                        ..Default::default()
+                    };
+
+                    user.insert(&ctx.data().db).await?;
+                }
+            }
+        }
+
+        None => {
+            ctx.author()
+                .direct_message(
+                    &ctx,
+                    serenity::CreateMessage::default().content(
+                        "**how to log into Tairitsu**:
+1. go to [Arcaea Online](https://arcaea.lowiro.com/) using a PC or laptop.
+2. open your browser's DevTools (Ctrl+Shift+I or F12).
+3. go to the Application tab (click the `>>` arrows if you don't see it.)
+4. under Storage > Cookie, click on the `https://arcaea.lowiro.com` entry and look for the entry with the name `sid` in the table to the right.
+5. copy `sid`'s value in the table and type in `a>login <value>` in Tairitsu's DMs.
+6. enjoy.
+                        ",
+                    ),
+                )
+                .await?;
+        }
+    }
 
     Ok(())
 }
