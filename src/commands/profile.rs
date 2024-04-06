@@ -171,6 +171,8 @@ pub async fn login(
                     user.insert(&ctx.data().db).await?;
                 }
             }
+
+            ctx.reply("you are now logged into the bot!").await?;
         }
 
         None => {
