@@ -33,3 +33,5 @@ jobs:
               with:
                   push: true
                   tags: j1nxie/closure-api:latest
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
