@@ -7,6 +7,8 @@ use sea_orm_migration::MigratorTrait;
 use tracing::level_filters::LevelFilter;
 use tracing_subscriber::EnvFilter;
 
+use crate::constants::STARTUP_TIME;
+
 mod commands;
 mod constants;
 mod migrator;
