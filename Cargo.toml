@@ -2,6 +2,7 @@
 name = "tairitsu-rs"
 version = "0.1.2"
 edition = "2021"
+build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -38,3 +39,7 @@ thousands = "0.2.0"
 tokio = { version = "1.36.0", features = ["full"] }
 tracing = "0.1.40"
 tracing-subscriber = "0.3.18"
+
+[build-dependencies]
+anyhow = "1.0.81"
+vergen = { version = "8.3.1", features = ["git", "gitcl"] }

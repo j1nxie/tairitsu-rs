@@ -30,9 +30,10 @@ pub fn get_version() -> String {
 
     if let Ok(semver) = semver {
         let version_name = format!(
-            "{} - {}",
+            "{} - {} [{}]",
             semver,
-            ARCAEA[(semver.major + semver.minor - 1) as usize]
+            ARCAEA[(semver.major + semver.minor - 1) as usize],
+            env!("VERGEN_GIT_SHA")
         );
         version_name
     } else {
