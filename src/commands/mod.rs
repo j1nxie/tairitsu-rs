@@ -1,4 +1,4 @@
-use poise::serenity_prelude::{self as serenity, Color};
+use poise::serenity_prelude::{self as serenity, Color, UserId};
 
 use crate::{Context, Error};
 
@@ -21,4 +21,12 @@ pub async fn login_error(ctx: Context<'_>) -> Result<(), Error> {
     .await?;
 
     Ok(())
+}
+
+pub(crate) fn get_bot_id(ctx: Context<'_>) -> UserId {
+    ctx.cache().current_user().id
+}
+
+pub(crate) fn get_bot_avatar(ctx: Context<'_>) -> String {
+    ctx.cache().current_user().avatar_url().unwrap()
 }

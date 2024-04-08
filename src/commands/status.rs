@@ -1,14 +1,11 @@
 use std::time::UNIX_EPOCH;
 
 use crate::{
+    commands::get_bot_avatar,
     constants::{version::get_version, POISE_VERSION},
     Context, Error,
 };
 use poise::serenity_prelude as serenity;
-
-fn get_bot_avatar(ctx: Context<'_>) -> String {
-    ctx.cache().current_user().avatar_url().unwrap()
-}
 
 /// get the bot's status
 #[poise::command(prefix_command, slash_command)]

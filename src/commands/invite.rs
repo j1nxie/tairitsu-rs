@@ -1,10 +1,4 @@
-use poise::serenity_prelude::UserId;
-
-use crate::{Context, Error};
-
-fn get_bot_id(ctx: Context<'_>) -> UserId {
-    ctx.cache().current_user().id
-}
+use crate::{commands::get_bot_id, Context, Error};
 
 #[poise::command(slash_command, prefix_command)]
 pub async fn invite(ctx: Context<'_>) -> Result<(), Error> {
