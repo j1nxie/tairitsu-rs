@@ -2962,6 +2962,7 @@ dependencies = [
  "async-trait",
  "chrono",
  "dotenvy",
+ "lazy_static",
  "poise",
  "reqwest 0.12.2",
  "rust_decimal",
