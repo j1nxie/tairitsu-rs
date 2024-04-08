@@ -35,8 +35,7 @@ pub async fn song(
             let jacket = Jackets::find()
                 .filter(jackets::Column::SongId.eq(&song.ingame_id))
                 .one(&ctx.data().db)
-                .await?
-                .unwrap();
+                .await?;
             let charts = Charts::find()
                 .filter(charts::Column::SongId.eq(&song.ingame_id))
                 .all(&ctx.data().db)
@@ -65,7 +64,10 @@ pub async fn song(
                             .field("bpm", song.bpm, true)
                             .field("version", song.version, true)
                             .field("difficulties", chart_string, false)
-                            .image(jacket.jacket_url),
+                            .image(match jacket {
+                                Some(jacket) => jacket.jacket_url,
+                                None => String::new(),
+                            }),
                     ),
                 )
                 .await?;
