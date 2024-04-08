@@ -28,7 +28,7 @@ pub(crate) fn get_bot_id(ctx: Context<'_>) -> UserId {
 }
 
 pub(crate) fn get_bot_avatar(ctx: Context<'_>) -> String {
-    ctx.cache().current_user().avatar_url().unwrap()
+    ctx.cache().current_user().avatar_url().unwrap_or_default()
 }
 
 pub(crate) fn get_invite_link(ctx: Context<'_>) -> String {
