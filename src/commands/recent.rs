@@ -73,8 +73,7 @@ pub async fn recent(
                                 .and(jackets::Column::Difficulty.eq(diff_name)),
                         )
                         .one(&ctx.data().db)
-                        .await?
-                        .unwrap();
+                        .await?;
 
                     let clear_type = match recent.clear_type {
                         // TODO: figure out the rest
@@ -167,7 +166,10 @@ pub async fn recent(
                                     .unwrap(),
                                 )
                                 .color(color)
-                                .thumbnail(jacket.jacket_url),
+                                .thumbnail(match jacket {
+                                    Some(jacket) => jacket.jacket_url,
+                                    None => String::new(),
+                                }),
                         ),
                     )
                     .await?;

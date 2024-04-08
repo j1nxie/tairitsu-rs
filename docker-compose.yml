@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  tairitsu:
+    image: j1nxie/tairitsu-rs:latest
+    hostname: tairitsu
+    container_name: tairitsu
+    env_file:
+      - .env
+    depends_on:
+      - db
+  db:
+    image: postgres
+    hostname: tairitsu_db
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword

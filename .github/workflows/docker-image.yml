@@ -11,6 +11,8 @@ on:
             - ".github/workflows/docker-image.yml"
         branches:
             - "main"
+    release:
+        types: [published]
 
 jobs:
     docker:
@@ -28,10 +30,18 @@ jobs:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+            - name: Extract metadata (tags, labels) for Docker
+              id: meta
+              uses: docker/metadata-action@v5
+              with:
+                  images: j1nxie/tairitsu
+
             - name: Build and push
               uses: docker/build-push-action@v5
               with:
-                  push: true
-                  tags: j1nxie/tairitsu-rs:latest
+                  context: .
+                  push: ${{ github.event_name != 'pull_request' }}
+                  tags: ${{ steps.meta.outputs.tags }}
+                  labels: ${{ steps.meta.outputs.labels }}
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
