@@ -81,7 +81,7 @@ pub async fn recent(
                         1 => "EASY CLEAR",
                         2 => "TRACK CLEAR",
                         3 => "HARD CLEAR",
-                        _ => todo!(),
+                        _ => "unknown clear type",
                     };
 
                     let chart = Charts::find()
